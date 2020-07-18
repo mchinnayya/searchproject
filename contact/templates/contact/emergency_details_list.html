@@ -1,0 +1,208 @@
+{% extends 'layout/app.html' %}
+{% block content %}
+
+<div class="kt-portlet kt-portlet--mobile">
+    <div class="kt-portlet__head kt-portlet__head--lg">
+        <div class="kt-portlet__head-label">
+            <span class="kt-portlet__head-icon">
+                <i class="kt-font-brand flaticon2-line-chart"></i>
+            </span>
+            <h3 class="kt-portlet__head-title">
+                Location List
+            </h3>
+        </div>
+        <div class="kt-portlet__head-toolbar">
+            <div class="kt-portlet__head-wrapper">
+                <a href="{% url 'emergency:emergency_upload' %}" class="btn btn-primary">
+                    <i class="fa fa-upload"></i>
+                    Upload
+                </a>&nbsp;&nbsp;
+
+                <a href="{% url 'emergency:emergencyDetails_create' %}" class="btn btn-primary">
+                    <i class="flaticon2-plus"></i>
+                    Add New
+                </a>&nbsp;&nbsp;
+
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xl-12 col-lg-12 order-lg-1 order-xl-1">
+
+            <div class="kt-portlet__body kt-portlet__body">
+                <form method="get">
+                    <table>
+                        <tr>
+                            <td>
+                                {{selectDropdown|safe}}
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" name="q" id="text_search_input"
+                                       value="{{ request.GET.q }}"/>
+                            </td>
+                            <td>
+                                <button type="submit" class="btn btn-primary">Search</button>
+                            </td>
+                            <td>
+                                <a href="/" class="btn btn-primary">Refresh</a>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+                <br/>
+                <table class="table" id="myTable">
+                    <thead>
+                    <tr>
+                        <th>Branch</th>
+                        <th>Area Name</th>
+                        <th>Extension No.</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody id="table-body">
+                    {% for emergency in EmergencyDetails %}
+
+                    <tr>
+                        <td style="display:none;" id="myinput">{{emergency.id}}></td>
+                        <td>{{ emergency.branch }}</td>
+                        <td>{{ emergency.contact_name }}</td>
+                        <td class="mybtn">
+                            {{ emergency.extension_number }}
+                            <i class="fa fa-genderless text-danger" title="Emergency Number"></i>&nbsp;&nbsp;<a
+                                href="{% url  'emergency:favorite_contact_save' %}" data-toggle="modal"
+                                data-target="#favorite_Contact"><i class="fas fa-heart" title="Add Favorite"
+                                                                   style="color: red ;width: 35px;height: 35px"></i></a>
+                        </td>
+                        <td>
+                            <a href="javascript:;" onclick='make_it_active("{% url refresh_str emergency.id %}")'
+                               title="Make it Active"><i class="fas fa-sync-alt"></i></a>
+                            <a href="javascript:;"
+                               onclick='delete_emergency_details("{% url delete_str emergency.id %}")'
+                               title="Delete"><i class="fas fa-trash"></i></a>
+                            <a href="{% url update_str emergency.id %}" title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="favorite_Contact" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add Favorite</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <form method="post" action="favorite_contact_save"  enctype="multipart/form-data"
+                      autocomplete="off" novalidate>
+                    {% csrf_token %}
+                     <input type="hidden"  id="contact_id" name="contact_id" value="">
+                    <table class="table">
+                        {% for favorite_item in favorite_list %}
+
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td><input type="radio" id="{{favorite_item.id}}" name='favorite'  value={{favorite_item.id}}>
+                            <td><a class="kt-nav__link" href="#" id="">
+                                <span class="kt-nav__link-icon"></span>
+                                <span class="kt-nav__link-text">{{favorite_item.favorite_name}}</span>
+                            </a></td>
+                        </tr>
+                        {% endfor %}
+
+                    </table>
+                    <button type="submit" value="Save" class="btn btn-primary">Save</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block java_script %}
+
+<script>
+    function delete_emergency_details(url, id) {
+        //alert('i am calling');
+        swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!'
+        }).then(function (result) {
+
+            if (result.value) {
+                $.post(url,
+                    {
+                        id: id,
+                        'csrfmiddlewaretoken': getCookie('csrftoken')
+                    },
+                    function (data, status) {
+
+                        window.location.reload();
+
+                    });
+            }
+        });
+    }
+
+    function make_it_active(url, id) {
+        //alert('i am calling');
+        swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, Make it active!'
+        }).then(function (result) {
+
+            if (result.value) {
+                $.post(url,
+                    {
+                        id: id,
+                        'csrfmiddlewaretoken': getCookie('csrftoken')
+                    },
+                    function (data, status) {
+
+                        window.location.reload();
+
+                    });
+            }
+        });
+    }
+</script>
+
+<script>
+$(document).ready(function(){
+
+    // code to read selected table row cell data (values).
+    var id = ""
+    $("#myTable").on('click','.mybtn',function(){
+         // get the current row
+         var currentRow=$(this).closest("tr");
+
+         var col1=currentRow.find("td:eq(0)").html(); // get current row 1st table cell TD value
+         id = col1.charAt(0);
+
+          console.log(id)
+           $("#contact_id").val(id);
+
+    });
+
+});
+
+</script>
+
+{% endblock %}

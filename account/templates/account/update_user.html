@@ -1,0 +1,64 @@
+{% extends "layout/app.html" %}
+ {% load crispy_forms_tags %}
+{% block content %}
+
+    <div class="row">
+        <div class="col-xl-12 col-lg-12 order-lg-1 order-xl-1">
+            <div class="kt-portlet kt-portlet--height-fluid kt-portlet--mobile ">
+                <div class="kt-portlet__head kt-portlet__head--lg kt-portlet__head--noborder kt-portlet__head--break-sm">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">
+                            Update User
+                        </h3>
+                    </div>
+                    <div class="kt-portlet__head-toolbar">
+                        <div class="dropdown dropdown-inline">
+
+                            <a href="{% url 'account:user_list' %}" class="btn btn-default pull-right">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="kt-portlet__body kt-portlet__body">
+
+                    <form action="../account/update" method="post" enctype="multipart/form-data" autocomplete="off" novalidate>
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-6">{{ user_form.password | as_crispy_field }}</div>
+                            <div class="col-6">{{ user_account_form.user_role | as_crispy_field }}</div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-6">{{ user_form.first_name | as_crispy_field }}</div>
+                            <div class="col-6">{{ user_form.last_name | as_crispy_field }}</div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6">{{ user_form.username | as_crispy_field }}</div>
+                            <div class="col-6">{{ user_form.email | as_crispy_field }}</div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6">{{ user_account_form.mobile | as_crispy_field }}</div>
+                            <div class="col-6">{{ user_account_form.organization | as_crispy_field }}</div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6">{{ user_account_form.gender | as_crispy_field }}</div>
+                            <div class="col-6">{{ user_account_form.user_picture | as_crispy_field }}</div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6">{{ user_account_form.start_date | as_crispy_field }}</div>
+                            <div class="col-6">{{ user_account_form.end_date | as_crispy_field }}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <input type="submit" value="Save" class="btn btn-primary pull-right"/>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

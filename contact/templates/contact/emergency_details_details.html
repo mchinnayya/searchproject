@@ -1,0 +1,67 @@
+{% extends 'layout/app11.html' %}
+{#{% extends "layout/app.html" %}#}
+{% load crispy_forms_tags %}
+{% block content %}
+    <br/><br/><br/>
+    <div class="col-xl-12 col-lg-12 order-lg-1 order-xl-1">
+    <!--begin:: Widgets/Best Sellers-->
+    <div class="kt-portlet kt-portlet--height-fluid">
+    <div class="kt-portlet__head">
+        <div class="kt-portlet__head-label">
+            <span class="kt-portlet__head-icon"><i class="kt-font-brand fa fa-eye"></i></span>
+            <h3 class="kt-portlet__head-title">Emergency Details View</h3>
+        </div>
+        <div class="kt-portlet__head-toolbar">
+            <div class="kt-portlet__head-wrapper">
+                <div class="kt-portlet__head-actions">
+                    <button type="button" class="btn btn-primary"
+                            onclick="window.location.href = '{% url "emergencyDetails_list"  %}';"><i
+                            class="fa fa-arrow-left" aria-hidden="true"></i>
+                        &nbsp;&nbsp;back
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="kt-portlet__body">
+    <div class="row">
+        <div class="offset-4 col-md-4">
+            <div class="table-responsive">
+                <table class="table">
+                    <tr>
+                        <td>Branch</td>
+                        <td>{{ emergency.branch_id }}</td>
+                    </tr>
+                    <tr>
+                        <td>Emergency Name</td>
+                        <td>{{ emergency.emergency_name }}</td>
+                    </tr>
+                    <tr>
+                        <td>Emergency Code</td>
+                        <td>
+
+                            {{ emergency.emergency_code }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Uploaded By</td>
+                        <td>{{ emergency.uploaded_by }}</td>
+                    </tr>
+                    <tr>
+                        <td>Created At</td>
+                        <td>{{ emergency.created_at }}</td>
+                    </tr>
+
+                    <tr>
+                        <td>Updated At</td>
+                        <td>{{ emergency.updated_at }}</td>
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+
+
+    </div>
+
+{% endblock %}

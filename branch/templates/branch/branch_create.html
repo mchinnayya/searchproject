@@ -1,0 +1,49 @@
+{% extends 'layout/app.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="row">
+    <div class="col-xl-12 col-lg-12 order-lg-1 order-xl-1">
+        <div class="kt-portlet kt-portlet--height-fluid kt-portlet--mobile ">
+            <div class="kt-portlet__head kt-portlet__head--lg kt-portlet__head--noborder kt-portlet__head--break-sm">
+                <div class="kt-portlet__head-label">
+                    <h3 class="kt-portlet__head-title">
+                        Add New Branch
+                    </h3>
+                </div>
+            </div>
+            <div class="kt-portlet__body kt-portlet__body">
+
+                <form method="post" class="kt-form" enctype="multipart/form-data" autocomplete="off" novalidate>
+                    {% csrf_token %}
+
+                    <div class="row">
+                        <div class="col-12">{{ form.branch_name | as_crispy_field }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">{{ form.branch_code | as_crispy_field }}</div>
+                    </div>
+                    <br /><br />
+                    <div class="row">
+                        <div class="col-12">
+                            <table align="right">
+                                <tr>
+                                    <td>
+                                        <input type="submit" value="Save"
+                                            class="btn btn-primary pull-right" />&nbsp;&nbsp;
+
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'branch:branch_list' %}"
+                                            class="btn btn-default pull-right">Back</a>
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

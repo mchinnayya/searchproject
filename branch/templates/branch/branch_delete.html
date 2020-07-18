@@ -1,0 +1,23 @@
+{% extends 'layout/app11.html' %}
+{#{% extends 'layout/app.html' %}#}
+{% load crispy_forms_tags %}
+{% block content %}
+     <br/><br/><br/>
+    <div class="container">
+        <div class="row">
+            <div class="offset-md-3 col-md-6 ">
+
+
+                <center>
+                    <h1>Delete Branch Record From Database</h1>
+                    <h1>Branch Delete</h1>
+                    <form method="post">{% csrf_token %}
+                        Are you sure you want to delete this Branch from record- "{{ object.branch_name }}" ?
+                        <input type="submit" class="btn btn-danger" value="Delete"/>
+                    </form>
+                </center>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

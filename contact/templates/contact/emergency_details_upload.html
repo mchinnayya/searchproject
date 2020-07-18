@@ -1,0 +1,33 @@
+{% extends 'layout/app.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<div class="container">
+    <br /><br /><br />
+    <div class="row">
+        <div class="offset-4  md-col-4">
+            <center>
+                <h1>Only Csv File Accepts</h1>
+                <form action="" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <label for="file" class="control-label"> Upload a file</label>
+                    <input type="file" id="file" name="file" class="form-control">
+                    {% if messages %}
+                    {% for message in messages %}
+                    <div>
+                        <strong>{{ message|safe }}</strong>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+
+                    {% endif %}
+
+                    <br />
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </form>
+            </center>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

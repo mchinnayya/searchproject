@@ -1,0 +1,112 @@
+{% extends 'layout/app.html' %}
+{% block content %}
+
+<div class="kt-portlet kt-portlet--mobile">
+    <div class="kt-portlet__head kt-portlet__head--lg">
+        <div class="kt-portlet__head-label">
+            <span class="kt-portlet__head-icon">
+                <i class="kt-font-brand flaticon2-line-chart"></i>
+            </span>
+            <h3 class="kt-portlet__head-title">
+                Branch List
+            </h3>
+        </div>
+        <div class="kt-portlet__head-toolbar">
+            <div class="kt-portlet__head-wrapper">
+                <a href="{% url 'branch:branch_create' %}" class="btn btn-primary">
+                    <i class="flaticon2-plus"></i>
+                    Add New
+                </a>&nbsp;&nbsp;
+
+            </div>
+        </div>
+    </div>
+
+    <!--end: Search Form -->
+
+
+    <!--begin: Datatable -->
+
+    <div class="row">
+        <div class="col-xl-12 col-lg-12 order-lg-1 order-xl-1">
+
+            <div class="kt-portlet__body kt-portlet__body">
+                <div class="kt-input-icon kt-input-icon--left ">
+
+                    <form method="GET" align="right" autocomplete="off">
+                        {% csrf_token %}
+                        <input type="text" class="form-control kt-quick-search__input" id="generalSearch"
+                            placeholder="Search Here...." name="q" value="{{ request.GET.q }}" style="width:400px;">
+                    </form>
+                    <span class="kt-input-icon__icon kt-input-icon__icon--left">
+                        <span><i class="la la-search"></i></span>
+                    </span>
+
+
+                </div>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Branch Name</th>
+                            <th>Branch Code</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body">
+                        {% for branch in Branches %}
+                        <tr>
+                            <td>{{ branch.branch_name }} ({{ branch.id }})</td>
+                            <td>{{ branch.branch_code }}</td>
+                            <td>
+                                <a onclick="delete_branch_details('{% url "branch:branch_delete" branch.id %}')"
+                                    title="Delete"><i class="fas fa-trash"></i></a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+
+
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block java_script %}
+
+<script>
+    function delete_branch_details(url, id) {
+
+        swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!'
+        }).then(function (result) {
+
+            if (result.value) {
+                $.post(url,
+                    {
+                        id: id,
+
+                        'csrfmiddlewaretoken': getCookie('csrftoken')
+                    },
+                    function (data, status) {
+
+                        window.location.reload();
+
+                    });
+            } else {
+
+            }
+        });
+    }
+</script>
+
+
+{% endblock %}

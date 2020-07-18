@@ -1,0 +1,87 @@
+{% extends 'layout/app.html' %}
+{% block content %}
+
+<div class="kt-portlet kt-portlet--mobile">
+    <div class="kt-portlet__head kt-portlet__head--lg">
+        <div class="kt-portlet__head-label">
+            <span class="kt-portlet__head-icon">
+            </span>
+            <h3 class="kt-portlet__head-title"><i class="fas fa-heart" title="Add Favorite" style="color: red ;width: 35px;height: 35px"></i>
+
+                  {{favorite.favorite_name}}
+
+
+            </h3>
+        </div>
+            <div class="kt-portlet__head-toolbar">
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 order-lg-1 order-xl-1">
+
+                <div class="kt-portlet__body kt-portlet__body">
+
+                <br/>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Branch</th>
+                        <th>Area Name</th>
+                        <th>Extension No.</th>
+                    </tr>
+                    </thead>
+                    <tr id="table-body">
+
+                    {% for emergency in favorite_contact  %}
+
+                    <tr>
+                         <td>{{ emergency.contact.branch }}</td>
+                         <td>{{ emergency.contact.contact_name }}</td>
+                         <td>{{ emergency.contact.extension_number }}</td>
+                    </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="favorite_Contact" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add Favorite</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!--                    <iframe style="top: 0;left: 0;width: 100%;height:800px; border: 0;" scrolling="no"-->
+                <!--                            src="{% url 'favorite:favorite_contact_create' %}"></iframe>-->
+                <form method="post" action="./favorite_contact_save" enctype="multipart/form-data"
+                      autocomplete="off" novalidate>
+                    {% csrf_token %}
+                    <table>
+                        {% for favorite_item in favorite_list %}
+                        <tr>
+                            <td><input type="redio"  id="{{favorite_item.id}}" name='favorite'  value={{favorite_item.id}}></td>
+                            <td><a class="kt-nav__link" href="{% url  'favorite:favorite_contact_view' favorite_item.id %}" id="">
+                                <span class="kt-nav__link-icon"></span>
+                                <span class="kt-nav__link-text">{{favorite_item.favorite_name}}</span>
+                            </a></td>
+                        </tr>
+                        {% endfor %}
+
+                    </table>
+                    <button type="submit" value="Save" class="btn btn-primary">Save</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+

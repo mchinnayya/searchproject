@@ -1,0 +1,274 @@
+{% extends "layout/app.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="row">
+    <div class="col-xl-3 col-lg-3 order-lg-1 order-xl-1">
+        <div class="kt-portlet kt-portlet--height-fluid">
+            <div class="kt-portlet__head">
+                <div class="kt-portlet__head-label">
+                    <span class="kt-portlet__head-icon"><i class="kt-font-brand fa fa-eye"></i></span>
+                    <h3 class="kt-portlet__head-title">Account View</h3>
+                </div>
+                <div class="kt-portlet__head-toolbar">
+                    <div class="kt-portlet__head-wrapper">
+                        <div class="kt-portlet__head-actions">
+                            <a href="{% url 'account:user_list' %}" class="btn btn-default">Back</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="kt-portlet__body">
+                <div class="row">
+                    <div class="table-responsive">
+                        <table class="table table-borderless">
+                            <tr>
+                                <td>Organization</td>
+                                <td>{{ employee_details.organization }}</td>
+                            </tr>
+                            <tr>
+                                <td>Mobile</td>
+                                <td>{{ employee_details.mobile }}</td>
+                            </tr>
+                            <tr>
+                                <td>Full Name</td>
+                                <td>{{ employee_details.user.first_name }} {{ employee_details.user.last_name }}</td>
+                            </tr>
+                            <tr>
+                                <td>Start Date</td>
+                                <td>{{ employee_details.start_date }}</td>
+                            </tr>
+                            <tr>
+                                <td>End Date</td>
+                                <td>{{ employee_details.end_date }}</td>
+                            </tr>
+                            <tr>
+                                <td>Gender</td>
+                                <td>
+                                    {% if employee_details.gender == '1' %}
+                                    Male
+                                    {% elif employee_details.gender == '2' %}
+                                    Female
+                                    {% else %}
+                                    Other
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-9 col-lg-9 order-lg-1 order-xl-1">
+        <div class="kt-portlet kt-portlet--tabs">
+            <div class="kt-portlet__head">
+                <div class="kt-portlet__head-toolbar">
+                    <ul class="nav nav-tabs nav-tabs-line nav-tabs-line-2x nav-tabs-line-primary bar_tabs"
+                        role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#attendance" role="tab">
+                                Attendance
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#leave" role="tab">
+                                Leaves
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#department" role="tab">
+                                Department
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#award" role="tab">
+                                Award
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#position" role="tab">
+                                Position
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#documents" role="tab">
+                                Documents
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="kt-portlet__body">
+                <div class="tab-content">
+                    <div class="tab-pane active " id="attendance" role="tabpanel">
+                        <div class="pull-right">
+                            <a href="{% url 'account:attendance_intime' employee_details.id  %}"
+                                class="btn btn-primary">InTime</a>
+                        </div>
+                        <br /><br /><br />
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>In time</th>
+                                <th>Out time</th>
+                                <th>Duration</th>
+                                <th>Action</th>
+                            </tr>
+                            {% for attendance in employee_attendence %}
+                            <tr>
+                                <td>{{ attendance.in_time }}</td>
+                                <td>{{ attendance.out_time }}</td>
+                                <td>{{ attendance.duration }}</td>
+                                <td>
+                                    <a href="{% url 'account:attendance_outtime'  attendance.id employee_details.id  %}"
+                                        class="btn btn-danger">Out Time</a>
+                                </td>
+                                {% endfor %}
+                        </table>
+                    </div>
+                    <div class="tab-pane" id="leave" role="tabpanel">
+                        <div class="pull-right">
+                            <a href="{% url 'account:account_leave_create' employee_details.id %}"
+                                class="btn btn-primary">Add New</a>
+                        </div>
+                        <br /><br /><br />
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>Leaves Type</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                            </tr>
+                            {% for leave in employee_leave %}
+                            <tr>
+                                <td>{{ leave.leave.name }}</td>
+                                <td>{{ leave.start_date }}</td>
+                                <td>{{ leave.end_date }}</td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                    <div class="tab-pane" id="department" role="tabpanel">
+                        <div class="pull-right">
+                            <a href="{% url 'account:account_department_create' employee_details.id %}"
+                                class="btn btn-primary">Add New</a>
+                        </div>
+                        <br /><br /><br />
+
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>Department Name</th>
+                                <th>Created By</th>
+                                <th>Reported To</th>
+                            </tr>
+                            {% for department in employee_department %}
+                            <tr>
+                                <td>{{ department.branch }}</td>
+                                <td>{{ department.created_by }}</td>
+                                <td>{{ department.reported_to }}</td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                    <div class="tab-pane " id="award" role="tabpanel">
+                        <div class="pull-right">
+                            <button class="btn btn-primary">
+                                Add New
+                            </button>
+                        </div>
+                        <br /><br /><br />
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>Award For</th>
+                                <th>Award Type</th>
+                                <th>Message</th>
+                                <th>Award Provided At</th>
+                                <th>Action</th>
+                            </tr>
+                            {% for award in employee_award %}
+                            <tr>
+                                <td>
+                                    {% if award.award_for == '40' %}
+                                    Milestone Completion
+                                    {% elif award.award_for == '41' %}
+                                    Performance
+                                    {% elif award.award_for == '42' %}
+                                    Best Employee Of Month
+                                    {% elif award.award_for == '43' %}
+                                    Best Employee Of The Year
+                                    {% else %}
+                                    Other
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if award.award_type == '45' %}
+                                    Milestone Completion
+                                    {% elif award.award_type == '46' %}
+                                    Performance
+                                    {% elif award.award_type == '47' %}
+                                    Best Employee Of Month
+                                    {% else %}
+                                    Other
+                                    {% endif %}
+                                </td>
+                                <td>{{ award.message }}</td>
+                                <td>{{ award.award_date }}</td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                    <div class="tab-pane" id="position" role="tabpanel">
+                        <div class="pull-right">
+                            <button class="btn btn-primary">
+                                Add New
+                            </button>
+                        </div>
+                        <br /><br /><br />
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>Position Name</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Action</th>
+                            </tr>
+                            {% for position1 in employee_position %}
+                            <tr>
+                                <td>{{ position1.position.position_name }}</td>
+                                <td>{{ position1.start_date }}</td>
+                                <td>{{ position1.end_date }}</td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                    <div class="tab-pane" id="documents" role="tabpanel">
+
+                        <div class="pull-right">
+                            <button class="btn btn-primary">
+                                Add New
+                            </button>
+                        </div>
+                        <br /><br /><br />
+                        <table class="table table-bordered">
+                            <tr>
+                                <th> Document</th>
+                                <th>Document File</th>
+                                <th>Submitted At</th>
+                                <th>Action</th>
+
+                            </tr>
+                            {% for document in employee_document %}
+                            <tr>
+                                <td>{{ document.document_type }}</td>
+                                <td>{{ document.document_file }}</td>
+                                <td>{{ document.submission_datetime }}</td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

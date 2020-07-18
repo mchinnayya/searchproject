@@ -1,0 +1,21 @@
+{% extends "layout/login.html" %}
+
+{% block content %}
+<p>{{error}}</p>
+    <form method="post" class="kt-form">
+        {% csrf_token %}
+
+        <div class="input-group">
+            <input type="text" class="form-control" name="username" placeholder="User Name" />
+        </div>
+        <div class="input-group">
+            <input type="password" name="password" class="form-control" placeholder="Password" />
+        </div>
+
+        <div class="kt-login__actions">
+            <button type="submit" class="btn btn-brand btn-elevate kt-login__btn-primary">Sign In</button>
+        </div>
+
+    </form>
+
+{% endblock %}

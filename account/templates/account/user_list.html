@@ -1,0 +1,51 @@
+{% extends "layout/app.html" %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-xl-12 col-lg-12 order-lg-1 order-xl-1">
+            <div class="kt-portlet kt-portlet--height-fluid kt-portlet--mobile ">
+                <div class="kt-portlet__head kt-portlet__head--lg kt-portlet__head--noborder kt-portlet__head--break-sm">
+                    <div class="kt-portlet__head-label">
+                        <h3 class="kt-portlet__head-title">
+                            All Users
+                        </h3>
+                    </div>
+                    <div class="kt-portlet__head-toolbar">
+                        <div class="dropdown dropdown-inline">
+                            <a href="{% url 'account:user_create' %}" class="btn btn-primary">
+                                Add New
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="kt-portlet__body kt-portlet__body">
+
+                    <table class="table">
+                        <tr>
+                            <td>User Name</td>
+                            <td>Email</td>
+                            <td>Mobile</td>
+                            <td>Role</td>
+                            <td>Action</td>
+                        </tr>
+
+                        {% for user in users %}
+                            <tr>
+                                <td>{{ user.first_name }} {{ user.last_name }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>{{ user.account.mobile }}</td>
+                                <td>{{ user.account.user_role }}</td>
+                                <td>
+                                    <a href="{% url 'account:accountuser_view' user.account.id %}" title="View"><i class="fas fa-eye"></i></a>
+                                    <a href="{% url 'account:edit_account' user.account.id %}"><i class="fas fa-edit"></i></a>
+                                    <a href="{% url 'account:edit_account' user.account.id %}"><i class="fas fa-trash"></i></a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
